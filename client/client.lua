@@ -107,11 +107,21 @@ CreateThread(function()
   for shopId, shop in pairs(Config.Shops) do
     print("HELLO BITCH")
     for _, target in ipairs(shop.targets) do
+      if shop.blip then
+        local blip = AddBlipForCoord(target.loc)
+        SetBlipSprite(blip, shop.blip.id)
+        SetBlipColour(blip, shop.blip.colour)
+        SetBlipScale(blip, shop.blip.scale)
+        SetBlipAsShortRange(blip, true)
+        BeginTextCommandSetBlipName("STRING")
+        AddTextComponentString(shop.title)
+        EndTextCommandSetBlipName(blip)
+      end  
       exports.ox_target:addBoxZone({
         coords = target.loc,
         size = vec3(target.length, target.width, 0.5),
         rotation = target.heading,
-        debug = true,
+        debug = false,
         distance = target.distance,
         options = {
           {

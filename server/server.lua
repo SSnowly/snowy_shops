@@ -89,7 +89,7 @@ RegisterNetEvent('snowy_shops:server:purchaseItems', function(data)
 
     -- Give items
     for _, item in ipairs(validItems) do
-        if not exports.ox_inventory:AddItem(src, item.id, item.quantity) then
+        if not exports.ox_inventory:AddItem(src, item.id, item.quantity, Config.Shops[data.shopId].items[item.id].metadata and Config.Shops[data.shopId].items[item.id].metadata or nil) then
             -- If adding item fails, refund the money
             if data.paymentMethod == 'card' then
                 exports.qbx_core:AddMoney(src, 'bank', total, 'Refunded')
