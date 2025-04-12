@@ -26,33 +26,33 @@ jobs:
           echo '::set-output name=SHORT_SHA::$(git rev-parse --short HEAD)'
           echo '::set-output name=DATE::$(date +'%D')'
 
-      - name: Change to web directory
-        run: cd web
-
       - name: Setup node
         uses: actions/setup-node@v2
         with:
           node-version: 18.x
           cache: 'yarn'
-          cache-dependency-path: 'yarn.lock'
+          cache-dependency-path: 'web/yarn.lock'
+          working-directory: web
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+        working-directory: web
 
       - name: Run build
         run: yarn build
+        working-directory: web
         env:
           CI: false
 
       - name: Bump manifest version
-        run: node ../.github/actions/bump-manifest-version.js
+        run: node .github/actions/bump-manifest-version.js
         env:
           TGT_RELEASE_VERSION: ${{ github.ref_name }}
 
       - name: Push manifest change
         uses: EndBug/add-and-commit@v8
         with:
-          add: ../fxmanifest.lua
+          add: fxmanifest.lua
           push: true
           author_name: Manifest Bumper
           author_email: 41898282+github-actions[bot]@users.noreply.github.com
@@ -65,7 +65,6 @@ jobs:
 
       - name: Bundle files
         run: |
-          cd ..
           mkdir -p ./temp/ox_inventory
           mkdir -p ./temp/ox_inventory/web
           cp ./{server.lua,README.md,LICENSE,fxmanifest.lua,client.lua,init.lua} ./temp/ox_inventory
