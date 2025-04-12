@@ -2,26 +2,36 @@ name: Tagged Release
 on:
   push:
     tags:
-      - "v*"
+      - "v*.*.*"
+
 jobs:
   create-tagged-release:
-    name: Create Release
+    name: Build and Create Tagged Release
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
+      - name: Install archive tools
+        run: sudo apt install zip
+
       - name: Checkout source
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.ref }}
-      - name: Get tag
-        run: echo "VERSION_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-        id: get_tag
+
+      - name: Get variables
+        id: get_vars
+        run: |
+          echo "VERSION_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          echo "DATE=$(date +'%D')" >> $GITHUB_OUTPUT
+
       - name: 'Setup Node.js'
         uses: 'actions/setup-node@v4'
         with:
           node-version: 18.x
+
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
@@ -35,28 +45,31 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
+
       - name: Install Yarn
         run: npm install -g yarn
+
       - name: Build Web Assets
         working-directory: ./web
         run: |
           yarn install --frozen-lockfile
           yarn build
+
+      - name: Bundle files
+        run: |
+          mkdir -p ./temp/snowy_shops
+          mkdir -p ./temp/snowy_shops/web
+          cp -r ./web/build ./temp/snowy_shops/web/build
+          cd ./temp && zip -r ../snowy_shops.zip ./snowy_shops
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          name: Snowy Shops - ${{ steps.get_tag.outputs.VERSION_TAG }}
+          name: Snowy Shops - ${{ steps.get_vars.outputs.VERSION_TAG }}
           draft: false
           prerelease: false
           generate_release_notes: true
-        id: release
-      - name: Upload Web Build
-        uses: actions/upload-release-asset@v2
+          files: snowy_shops.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.release.outputs.upload_url }}
-          asset_path: ./web/build
-          asset_name: web-build
-          asset_content_type: application/zip
           
