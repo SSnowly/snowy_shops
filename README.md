@@ -53,5 +53,5 @@ For support, bug reports, or feature requests, join our discord at https://disco
 ## Credits
 
 Created by Snowy<br />
-React Template by Project-Error
+React Template by Project-Error<br />
 Huge thanks for ox_inventory's release workflow, i edited it a bit but it helped me a looot!
