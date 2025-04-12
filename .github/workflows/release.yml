@@ -65,6 +65,7 @@ jobs:
           title: "${{ env.RELEASE_VERSION }}"
           prerelease: false
           files: snowy_shops.zip
+          update_existing: true
 
         env:
           CI: false
