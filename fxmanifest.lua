@@ -15,7 +15,8 @@ games {
 ui_page 'web/build/index.html'
 
 client_scripts {
-  "client/**/*"
+  "client/**/*",
+  '@qbx_core/modules/playerdata.lua'
 }
 server_scripts {
   "server/**/*"

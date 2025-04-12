@@ -1,5 +1,3 @@
-local QBCore = exports['qb-core']:GetCoreObject()
-
 RegisterNetEvent('snowy_shops:server:purchaseItems', function(data)
     local src = source
     local Player = exports.qbx_core:GetPlayer(src)

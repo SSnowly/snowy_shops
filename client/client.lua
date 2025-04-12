@@ -1,5 +1,4 @@
 local Config = require 'config'
-local QBCore = exports['qb-core']:GetCoreObject()
 local isShopOpen = false
 local CurrentShopId = nil
 
@@ -31,10 +30,9 @@ local function toggleNuiFrame(shouldShow, data)
         SendReactMessage('setItems', json.encode(items))
         SendReactMessage('setCategories', json.encode(data.categories))
         
-        local Player = QBCore.Functions.GetPlayerData()
         SendReactMessage('setBalance', json.encode({
-            cash = Player.money.cash,
-            bank = Player.money.bank
+            cash = QBX.PlayerData.money.cash,
+            bank = QBX.PlayerData.money.bank
         }))
     else
         TriggerScreenblurFadeOut(0)
