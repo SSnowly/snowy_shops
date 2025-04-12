@@ -44,35 +44,16 @@ jobs:
         env:
           CI: false
 
-      - name: Bump manifest version
-        run: node .github/actions/bump-manifest-version.js
-        env:
-          TGT_RELEASE_VERSION: ${{ github.ref_name }}
-
-      - name: Push manifest change
-        uses: EndBug/add-and-commit@v8
-        with:
-          add: fxmanifest.lua
-          push: true
-          author_name: Manifest Bumper
-          author_email: 41898282+github-actions[bot]@users.noreply.github.com
-          message: "chore: bump manifest version to ${{ github.ref_name }}"
-
-      - name: Update tag ref
-        uses: EndBug/latest-tag@latest
-        with:
-          tag-name: ${{ github.ref_name }}
-
       - name: Bundle files
         run: |
-          mkdir -p ./temp/ox_inventory
-          mkdir -p ./temp/ox_inventory/web
-          cp ./{server.lua,README.md,LICENSE,fxmanifest.lua,client.lua,init.lua} ./temp/ox_inventory
-          cp -r ./{setup,modules,data,locales} ./temp/ox_inventory
-          cp -r ./web/build ./temp/ox_inventory/web/build
-          cp ./web/LICENSE ./temp/ox_inventory/web/build
-          cp -r ./web/images ./temp/ox_inventory/web/images
-          cd ./temp && zip -r ../ox_inventory.zip ./ox_inventory
+          mkdir -p ./temp/snowy_shops
+          mkdir -p ./temp/snowy_shops/web
+          cp ./{server.lua,README.md,LICENSE,fxmanifest.lua,client.lua,init.lua} ./temp/snowy_shops
+          cp -r ./{setup,modules,data,locales} ./temp/snowy_shops
+          cp -r ./web/build ./temp/snowy_shops/web/build
+          cp ./web/LICENSE ./temp/snowy_shops/web/build
+          cp -r ./web/images ./temp/snowy_shops/web/images
+          cd ./temp && zip -r ../snowy_shops.zip ./snowy_shops
 
       - name: Create Release
         uses: "marvinpinto/action-automatic-releases@v1.2.1"
@@ -81,7 +62,7 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           title: "${{ env.RELEASE_VERSION }}"
           prerelease: false
-          files: ox_inventory.zip
+          files: snowy_shops.zip
 
         env:
           CI: false
