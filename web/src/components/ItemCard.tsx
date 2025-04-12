@@ -5,11 +5,13 @@ interface ItemCardProps {
   name: string;
   price: number;
   image: string;
+  license: string;
   description: string;
   onAddToCart: () => void;
+  licenses: Record<string, boolean>;
 }
 
-const Card = styled.div`
+const Card = styled.div<{ disabled?: boolean }>`
   aspect-ratio: 1;
   background: var(--background-color);
   border-radius: 8px;
@@ -19,6 +21,26 @@ const Card = styled.div`
   border: 1px solid var(--border-color);
   box-shadow: 0 4px 12px var(--shadow-color);
   position: relative;
+  opacity: ${(props: { disabled?: boolean }) => props.disabled ? 0.6 : 1};
+  pointer-events: ${(props: { disabled?: boolean }) => props.disabled ? 'none' : 'auto'};
+`;
+
+const Overlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  padding: 12px;
 `;
 
 const ItemImage = styled.img`
@@ -114,7 +136,9 @@ const ItemCard: React.FC<ItemCardProps> = ({
   price,
   image,
   description,
-  onAddToCart
+  onAddToCart,
+  license,
+  licenses
 }) => {
   const [quantity, setQuantity] = useState(1);
 
@@ -131,8 +155,13 @@ const ItemCard: React.FC<ItemCardProps> = ({
     }
   };
 
+  const getLicensed = () => {
+    if (!license) return true;
+    return licenses[license] || false;
+  }
   return (
     <Card>
+      {!getLicensed() && <Overlay>License Required</Overlay>}
       <ItemImage src={image} alt={name} />
       <ItemName>{name}</ItemName>
       <ItemPrice>${price.toLocaleString()}</ItemPrice>

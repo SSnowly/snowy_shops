@@ -18,6 +18,7 @@ interface ShopItem {
   image: string;
   description: string;
   category: string;
+  license: string;
 }
 
 interface CartItem extends ShopItem {
@@ -57,7 +58,7 @@ const App: React.FC = () => {
   const [balance, setBalance] = useState<Balance>({ cash: 0, bank: 0 });
   const [shopTitle, setShopTitle] = useState<string>('Shop');
   const [categories, setCategories] = useState<Category[]>([]);
-  
+  const [licenses, setLicenses] = useState<Record<string, boolean>>({});
   useNuiEvent<boolean>('setVisible', (data) => {
     setIsVisible(data);
     if (!data) {
@@ -117,7 +118,10 @@ const App: React.FC = () => {
       }]);
     }
   });
-
+  useNuiEvent<string>('setLicenses', (data) => {
+    const licensesParsed: Record<string, boolean> = JSON.parse(data);
+    setLicenses(licensesParsed);
+  });
   const handleAddToCart = (item: ShopItem) => {
     setCart(prevCart => {
       const existingItem = prevCart.find(cartItem => cartItem.id === item.id);
@@ -208,6 +212,7 @@ const App: React.FC = () => {
           onSearch={setSearchQuery}
           balance={balance}
           shopTitle={shopTitle}
+          licenses={licenses}
         />
       </NuiWrapper>
     </BackgroundContainer>

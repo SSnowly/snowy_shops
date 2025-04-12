@@ -76,12 +76,14 @@ Config.Shops = {
         categories = Config.Categories.weaponstore,
 		blip = {
 			id = 110, colour = 69, scale = 0.8
-		}, inventory = {
+		}, 
+        items = {
 			{ name = 'ammo-9', price = 5, category = 'Ammo' },
 			{ name = 'WEAPON_KNIFE', price = 200, category = 'Weapons' },
 			{ name = 'WEAPON_BAT', price = 100, category = 'Weapons' },
 			{ name = 'WEAPON_PISTOL', price = 1000, metadata = { registered = true }, license = 'weapon', category = 'Weapons' }
-		}, targets = {
+		}, 
+        targets = {
 			{ loc = vec3(-660.92, -934.10, 21.94), length = 0.6, width = 0.5, heading = 180.0, minZ = 21.8, maxZ = 22.2, distance = 2.0 },
 			{ loc = vec3(808.86, -2158.50, 29.73), length = 0.6, width = 0.5, heading = 360.0, minZ = 29.6, maxZ = 30.0, distance = 2.0 },
 			{ loc = vec3(1693.57, 3761.60, 34.82), length = 0.6, width = 0.5, heading = 227.39, minZ = 34.7, maxZ = 35.1, distance = 2.0 },
@@ -105,10 +107,33 @@ Config.Shops = {
         },
 		blip = {
 			id = 402, colour = 69, scale = 0.8
-		}, inventory = {
+		}, 
+        items = {
 			{ name = 'lockpick', price = 10, category = 'Tools' }
-		}, targets = {
+		}, 
+        targets = {
 			{ loc = vec3(2746.8, 3473.13, 55.67), length = 0.6, width = 3.0, heading = 65.0, minZ = 55.0, maxZ = 56.8, distance = 3.0 }
+		}
+	},
+
+    PoliceArmoury = {
+		title = 'Police Armoury',
+        categories = Config.Categories.weaponstore,
+        groups = "police",
+		blip = {
+			id = 110, colour = 84, scale = 0.8
+		}, items = {
+			{ name = 'ammo-9', price = 5, category = 'Ammo' },
+			{ name = 'ammo-rifle', price = 5, category = 'Ammo' },
+			{ name = 'WEAPON_FLASHLIGHT', price = 200, category = 'Weapons' },
+			{ name = 'WEAPON_NIGHTSTICK', price = 100, category = 'Weapons' },
+			{ name = 'WEAPON_PISTOL', price = 500, metadata = { registered = true, serial = 'POL' }, license = 'weapon', category = 'Weapons' },
+			{ name = 'WEAPON_CARBINERIFLE', price = 1000, metadata = { registered = true, serial = 'POL' }, license = 'weapon', grade = 3, category = 'Weapons' },
+			{ name = 'WEAPON_STUNGUN', price = 500, metadata = { registered = true, serial = 'POL'}, category = 'Weapons' }
+		}, locations = {
+			vec3(451.51, -979.44, 30.68)
+		}, targets = {
+			{ loc = vec3(453.21, -980.03, 30.68), length = 0.5, width = 3.0, heading = 270.0, minZ = 30.5, maxZ = 32.0, distance = 6 }
 		}
 	},
 }

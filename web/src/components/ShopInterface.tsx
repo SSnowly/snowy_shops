@@ -12,6 +12,7 @@ interface ShopItem {
   image: string;
   description: string;
   category: string;
+  license: string;
 }
 
 interface CartItemType extends ShopItem {
@@ -40,6 +41,7 @@ interface ShopInterfaceProps {
     bank: number;
   };
   shopTitle: string;
+  licenses: Record<string, boolean>;
 }
 
 export const IslandBase = styled.div`
@@ -294,7 +296,8 @@ const ShopInterface: React.FC<ShopInterfaceProps> = ({
   onPayment,
   onSearch,
   balance,
-  shopTitle
+  shopTitle,
+  licenses
 }) => {
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -347,6 +350,8 @@ const ShopInterface: React.FC<ShopInterfaceProps> = ({
               key={item.id}
               {...item}
               onAddToCart={() => onAddToCart(item)}
+              license={item.license}
+              licenses={licenses}
             />
           ))}
         </ItemsGrid>

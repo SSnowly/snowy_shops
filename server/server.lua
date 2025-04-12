@@ -11,7 +11,10 @@ RegisterNetEvent('snowy_shops:server:purchaseItems', function(data)
         })
         return
     end
-
+    if Config.Shops[data.shopId].group and not Config.Shops[data.shopId].group == Player.PlayerData.job.name or Config.Shops[data.shopId].group == Player.PlayerData.gang.name then
+        print("[WARNING] Player " .. src .. " tried to purchase items from a shop they are not allowed to purchase from")
+        return
+    end
     local total = 0
     local validItems = {}
 
@@ -19,6 +22,22 @@ RegisterNetEvent('snowy_shops:server:purchaseItems', function(data)
         local shopItem
         for _, item in ipairs(Config.Shops[data.shopId].items) do
             if item.name == itemName then
+                if item.license and not Player.PlayerData.metadata.licences[item.license] then
+                    lib.notify(src, {
+                        title = 'Error',
+                        description = 'You do not have a license for this item',
+                        type = 'error'
+                    })
+                    return
+                end
+                if item.grade and item.grade > Player.PlayerData.job.grade.level then
+                    lib.notify(src, {
+                        title = 'Error',
+                        description = 'You do not have the required grade to purchase this item',
+                        type = 'error'
+                    })
+                    return
+                end
                 shopItem = item
                 break
             end
@@ -82,19 +101,36 @@ RegisterNetEvent('snowy_shops:server:purchaseItems', function(data)
     end
 
     for _, item in ipairs(validItems) do
-        if not exports.ox_inventory:AddItem(src, item.id, item.quantity, Config.Shops[data.shopId].items[item.id].metadata and Config.Shops[data.shopId].items[item.id].metadata or nil) then
-            if data.paymentMethod == 'card' then
-                exports.qbx_core:AddMoney(src, 'bank', total, 'Refunded')
-            else
-                exports.qbx_core:AddMoney(src, 'cash', total, 'Refunded')
+        if item.metadata then
+            if not exports.ox_inventory:AddItem(src, item.id, item.quantity, item.metadata) then
+                if data.paymentMethod == 'card' then
+                    exports.qbx_core:AddMoney(src, 'bank', total, 'Refunded')
+                else
+                    exports.qbx_core:AddMoney(src, 'cash', total, 'Refunded')
+                end
+                
+                lib.notify(src, {
+                    title = 'Error',
+                    description = 'Failed to give items, money refunded',
+                    type = 'error'
+                })
+                return
             end
-            
-            lib.notify(src, {
-                title = 'Error',
-                description = 'Failed to give items, money refunded',
-                type = 'error'
-            })
-            return
+        else
+            if not exports.ox_inventory:AddItem(src, item.id, item.quantity) then
+                if data.paymentMethod == 'card' then
+                    exports.qbx_core:AddMoney(src, 'bank', total, 'Refunded')
+                else
+                    exports.qbx_core:AddMoney(src, 'cash', total, 'Refunded')
+                end
+                
+                lib.notify(src, {
+                    title = 'Error',
+                    description = 'Failed to give items, money refunded',
+                    type = 'error'
+                })
+                return
+            end
         end
     end
 
