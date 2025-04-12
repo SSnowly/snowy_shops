@@ -22,12 +22,13 @@ jobs:
         uses: 'actions/setup-node@v4'
         with:
           node-version: 18.x
+          cache: 'yarn'
       - name: Install Yarn
         run: npm install -g yarn
       - name: Build Web Assets
         working-directory: ./web
         run: |
-          yarn install
+          yarn install --frozen-lockfile
           yarn build
       - name: Create Release
         uses: softprops/action-gh-release@v1
