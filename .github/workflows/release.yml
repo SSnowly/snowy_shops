@@ -48,7 +48,7 @@ jobs:
         run: |
           mkdir -p ./temp/snowy_shops
           mkdir -p ./temp/snowy_shops/web
-          cp ./{README.md,LICENSE,fxmanifest.lua,config.lua} ./temp/snowy_shops
+          cp ./{README.md,fxmanifest.lua,config.lua} ./temp/snowy_shops
           cp -r ./server ./temp/snowy_shops
           cp -r ./client ./temp/snowy_shops
           cp -r ./web/build ./temp/snowy_shops/web/build
