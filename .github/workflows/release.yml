@@ -7,6 +7,8 @@ jobs:
   create-tagged-release:
     name: Create Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
@@ -27,19 +29,20 @@ jobs:
         run: |
           yarn install
           yarn build
-      - name: Create release
-        uses: marvinpinto/action-automatic-releases@latest
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
         with:
-          title: Snowy Shops - ${{ steps.get_tag.outputs.VERSION_TAG }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          name: Snowy Shops - ${{ steps.get_tag.outputs.VERSION_TAG }}
+          draft: false
           prerelease: false
-        id: auto_release
+          generate_release_notes: true
+        id: release
       - name: Upload Web Build
         uses: actions/upload-release-asset@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.auto_release.outputs.upload_url }}
+          upload_url: ${{ steps.release.outputs.upload_url }}
           asset_path: ./web/build
           asset_name: web-build
           asset_content_type: application/zip
