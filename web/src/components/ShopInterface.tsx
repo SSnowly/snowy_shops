@@ -43,7 +43,7 @@ interface ShopInterfaceProps {
 }
 
 export const IslandBase = styled.div`
-  background: var(--background-color);
+  background: var(--background-color-transparent);
   border-radius: 12px;
   box-shadow: 0 8px 32px var(--shadow-color);
   border: 1px solid var(--border-color);
@@ -196,13 +196,10 @@ const CartHeader = styled.div`
 const CartLogo = styled.div`
   position: absolute;
   left: 50%;
-  background-color: var(--background-color);
-  border-radius: 12px;
   transform: translate(-50%, -55%);
   display: flex;
   width: 200px;
   align-items: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   justify-content: center;
   overflow: hidden;
 
@@ -390,4 +387,4 @@ const ShopInterface: React.FC<ShopInterfaceProps> = ({
   );
 };
 
-export default ShopInterface; 
+export default ShopInterface;

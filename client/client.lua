@@ -24,8 +24,8 @@ local function toggleNuiFrame(shouldShow, data)
     SetNuiFocus(shouldShow, shouldShow)
     isShopOpen = shouldShow
     SendReactMessage('setVisible', shouldShow)
-    
     if shouldShow then
+        TriggerScreenblurFadeIn(0)
         -- Send initial data when opening shop
         SendReactMessage('setShopTitle', data.title)
         print(json.encode(data.items))
@@ -39,6 +39,8 @@ local function toggleNuiFrame(shouldShow, data)
             cash = Player.money.cash,
             bank = Player.money.bank
         }))
+    else
+        TriggerScreenblurFadeOut(0)
     end
 end
 

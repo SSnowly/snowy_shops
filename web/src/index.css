@@ -1,5 +1,6 @@
 body {
   --background-color: #1a1a1a;
+  --background-color-transparent: rgba(26, 26, 26, 0.95);
   --background-hover-color: #2a2a2a;
   --primary-color: #31cc58;
   --primary-hover-color: #21a51d;
