@@ -19,12 +19,28 @@ jobs:
       - name: 'Setup Node.js'
         uses: 'actions/setup-node@v1'
         with:
-          node-version: 14.x
+          node-version: 18.x
+      - name: Install Yarn
+        run: npm install -g yarn
+      - name: Build Web Assets
+        working-directory: ./web
+        run: |
+          yarn install
+          yarn build
       - name: Create release
         uses: marvinpinto/action-automatic-releases@latest
         with:
-          title: React/Lua Boilerplate - ${{ steps.get_tag.outputs.VERSION_TAG }}
+          title: Snowy Shops - ${{ steps.get_tag.outputs.VERSION_TAG }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           prerelease: false
         id: auto_release
+      - name: Upload Web Build
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.auto_release.outputs.upload_url }}
+          asset_path: ./web/build
+          asset_name: web-build
+          asset_content_type: application/zip
           
