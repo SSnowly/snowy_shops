@@ -19,21 +19,18 @@ local function formatItems(items)
     end
     return itemReturn
 end
--- Function to toggle NUI frame
 local function toggleNuiFrame(shouldShow, data)
     SetNuiFocus(shouldShow, shouldShow)
     isShopOpen = shouldShow
     SendReactMessage('setVisible', shouldShow)
     if shouldShow then
         TriggerScreenblurFadeIn(0)
-        -- Send initial data when opening shop
         SendReactMessage('setShopTitle', data.title)
         print(json.encode(data.items))
         local items = formatItems(data.items)
         SendReactMessage('setItems', json.encode(items))
         SendReactMessage('setCategories', json.encode(data.categories))
         
-        -- Get player's money
         local Player = QBCore.Functions.GetPlayerData()
         SendReactMessage('setBalance', json.encode({
             cash = Player.money.cash,
@@ -44,12 +41,6 @@ local function toggleNuiFrame(shouldShow, data)
     end
 end
 
--- Command to open shop (for testing)
-RegisterCommand('shop', function()
-    if not isShopOpen then
-        toggleNuiFrame(true)
-    end
-end)
 
 RegisterNUICallback('hideFrame', function(_, cb)
     toggleNuiFrame(false)
@@ -84,26 +75,6 @@ RegisterCommand('shop', function()
         toggleNuiFrame(true)
     end
 end, false)
-
--- Utility function to draw 3D text
-function DrawText3D(x, y, z, text)
-    local onScreen, _x, _y = World3dToScreen2d(x, y, z)
-    local px, py, pz = table.unpack(GetGameplayCamCoords())
-    local scale = 0.35
-    
-    if onScreen then
-        SetTextScale(scale, scale)
-        SetTextFont(4)
-        SetTextProportional(1)
-        SetTextColour(255, 255, 255, 215)
-        SetTextOutline()
-        SetTextEntry("STRING")
-        SetTextCentre(1)
-        AddTextComponentString(text)
-        DrawText(_x, _y)
-    end
-end
-
 
 CreateThread(function()
   for shopId, shop in pairs(Config.Shops) do

@@ -5,7 +5,6 @@ RegisterNetEvent('snowy_shops:server:purchaseItems', function(data)
     local Player = exports.qbx_core:GetPlayer(src)
     if not Player then return end
 
-    -- Validate shop exists
     if not Config.Shops[data.shopId] then
         lib.notify(src, {
             title = 'Error',
@@ -15,12 +14,10 @@ RegisterNetEvent('snowy_shops:server:purchaseItems', function(data)
         return
     end
 
-    -- Calculate total and validate items
     local total = 0
     local validItems = {}
-    
+
     for itemName, quantity in pairs(data.items) do
-        -- Find the item in the shop's items array
         local shopItem
         for _, item in ipairs(Config.Shops[data.shopId].items) do
             if item.name == itemName then
@@ -46,7 +43,6 @@ RegisterNetEvent('snowy_shops:server:purchaseItems', function(data)
         })
     end
 
-    -- Check if player has enough money
     if data.paymentMethod == 'card' then
         if Player.PlayerData.money.bank < total then
             lib.notify(src, {
@@ -87,10 +83,8 @@ RegisterNetEvent('snowy_shops:server:purchaseItems', function(data)
         end
     end
 
-    -- Give items
     for _, item in ipairs(validItems) do
         if not exports.ox_inventory:AddItem(src, item.id, item.quantity, Config.Shops[data.shopId].items[item.id].metadata and Config.Shops[data.shopId].items[item.id].metadata or nil) then
-            -- If adding item fails, refund the money
             if data.paymentMethod == 'card' then
                 exports.qbx_core:AddMoney(src, 'bank', total, 'Refunded')
             else
@@ -106,7 +100,6 @@ RegisterNetEvent('snowy_shops:server:purchaseItems', function(data)
         end
     end
 
-    -- Success notification
     lib.notify(src, {
         title = 'Purchase successful',
         description = ('Bought %d items for $%d'):format(#validItems, total),
