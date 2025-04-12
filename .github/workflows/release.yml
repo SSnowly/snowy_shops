@@ -48,11 +48,10 @@ jobs:
         run: |
           mkdir -p ./temp/snowy_shops
           mkdir -p ./temp/snowy_shops/web
-          cp ./{server.lua,README.md,LICENSE,fxmanifest.lua,client.lua,init.lua} ./temp/snowy_shops
-          cp -r ./{setup,modules,data,locales} ./temp/snowy_shops
+          cp ./{README.md,LICENSE,fxmanifest.lua,config.lua} ./temp/snowy_shops
+          cp -r ./server ./temp/snowy_shops
+          cp -r ./client ./temp/snowy_shops
           cp -r ./web/build ./temp/snowy_shops/web/build
-          cp ./web/LICENSE ./temp/snowy_shops/web/build
-          cp -r ./web/images ./temp/snowy_shops/web/images
           cd ./temp && zip -r ../snowy_shops.zip ./snowy_shops
 
       - name: Create Release
