@@ -7,7 +7,7 @@ local function formatItems(items)
     for _, item in ipairs(items) do
         local itemData = exports.ox_inventory:Items(item.name)
         if not itemData or not itemData.name then goto skip end
-        if item.grade and QBX.PlayerData.job.grade.level < item.grade then
+        if item.grade and ((QBX.PlayerData.job and QBX.PlayerData.job.grade.level < item.grade) or (QBX.PlayerData.gang and QBX.PlayerData.gang.grade.level < item.grade)) then
           goto skip
         end
         itemReturn[#itemReturn+1] = {
@@ -22,32 +22,61 @@ local function formatItems(items)
     end
     return itemReturn
 end
+
+local function formatCategories(categories)
+    local newCategories = {}
+    for _, category in ipairs(categories) do
+        if not category then goto skip end
+        if category.groups then
+            local hasAccess = false
+            if type(category.groups) == "string" then
+                if (QBX.PlayerData.job.name == category.groups and QBX.PlayerData.job.grade.level >= category.grade) or (QBX.PlayerData.gang.name == category.groups and QBX.PlayerData.gang.grade.level >= category.grade) then
+                    hasAccess = true
+                end
+            else
+              for group, grade in pairs(category.groups) do
+                  if (QBX.PlayerData.job.name == group and QBX.PlayerData.job.grade.level >= grade) or (QBX.PlayerData.gang.name == group and QBX.PlayerData.gang.grade.level >= grade) then
+                      hasAccess = true
+                      break
+                  end
+              end
+            end
+            if not hasAccess then goto skip end
+        end
+        newCategories[#newCategories+1] = {
+            id = category.id,
+            name = category.name,
+            icon = category.icon,
+        }
+        ::skip::
+    end
+    return newCategories
+end
+
 local function toggleNuiFrame(shouldShow, data)
     SetNuiFocus(shouldShow, shouldShow)
     isShopOpen = shouldShow
-    SendReactMessage('setVisible', shouldShow)
+    
     if shouldShow then
         TriggerScreenblurFadeIn(0)
-        SendReactMessage('setShopTitle', data.title)
-        local items = formatItems(data.items)
-        SendReactMessage('setItems', json.encode(items))
-        SendReactMessage('setCategories', json.encode(data.categories))
-        SendReactMessage('setLicenses', json.encode(QBX.PlayerData.metadata.licences))
-        SendReactMessage('setBalance', json.encode({
-            cash = QBX.PlayerData.money.cash,
-            bank = QBX.PlayerData.money.bank
-        }))
+        local shopData = {
+            visible = shouldShow,
+            title = data.title,
+            items = formatItems(data.items),
+            categories = formatCategories(data.categories),
+            licenses = QBX.PlayerData.metadata.licences,
+            balance = {
+                cash = QBX.PlayerData.money.cash,
+                bank = QBX.PlayerData.money.bank
+            },
+            theme = data.theme or Config.DefaultTheme
+        }
+        SendReactMessage('setShopData', json.encode(shopData))
     else
+        SendReactMessage('setVisible', false)
         TriggerScreenblurFadeOut(0)
     end
 end
-
-
-RegisterNUICallback('hideFrame', function(_, cb)
-    toggleNuiFrame(false)
-    CurrentShopId = nil
-    cb({})
-end)
 
 RegisterNUICallback('showNotification', function(data, cb)
     lib.notify({
@@ -89,14 +118,14 @@ CreateThread(function()
         EndTextCommandSetBlipName(blip)
       end
       
-      if shop.group then
+      if shop.groups then
         exports.ox_target:addBoxZone({
           coords = target.loc,
           size = vec3(target.length, target.width, 0.5),
           rotation = target.heading,
           debug = false,
           distance = target.distance,
-          groups = shop.group,
+          groups = shop.groups,
           options = {
             {
               name = "shop_" .. target.loc.x .. "_" .. target.loc.y .. "_" .. target.loc.z,

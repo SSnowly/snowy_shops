@@ -1,14 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import { createRoot } from 'react-dom/client';
 import App from './components/App';
-import {VisibilityProvider} from "./providers/VisibilityProvider";
+import './index.css';
+import { debugData } from "./utils/debugData";
 
-ReactDOM.render(
+const container = document.getElementById('root');
+if (!container) throw new Error('Failed to find the root element');
+const root = createRoot(container);
+
+root.render(
   <React.StrictMode>
-    <VisibilityProvider>
-      <App />
-    </VisibilityProvider>
-  </React.StrictMode>,
-  document.getElementById('root')
+    <App />
+  </React.StrictMode>
 );

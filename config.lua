@@ -1,5 +1,17 @@
 Config = {}
 
+Config.DefaultTheme = {
+    primary = { r = 49, g = 204, b = 88 }, -- #31cc58
+    secondary = { r = 33, g = 165, b = 29 }, -- #21a51d
+    background = { r = 26, g = 26, b = 26 }, -- #1a1a1a
+    text = { r = 255, g = 255, b = 255 }, -- #ffffff
+    border = { r = 255, g = 255, b = 255, a = 0.1 },
+    button = {
+        cash = { r = 74, g = 226, b = 112 }, -- #4ae270
+        bank = { r = 74, g = 144, b = 226 } -- #4a90e2
+    },
+    logo = 'https://i.ibb.co/GQNykkH5/logo.png'
+}
 
 Config.Categories = {
     general = {
@@ -34,10 +46,18 @@ Config.Categories = {
             id = "Ammo",
             name = "Ammo",
             icon = "fa-solid fa-box-open"
-        }
+        },
+		{
+			id = "Rifles",
+			name = "Rifles",
+			icon = "fa-solid fa-person-rifle",
+			groups = { 
+				--["job/gang"] = grade,
+				["lostmc"] = 3
+			}, -- or groups = "police"
+		}
     },
 }
-
 
 Config.Shops = {
     General = {
@@ -81,7 +101,8 @@ Config.Shops = {
 			{ name = 'ammo-9', price = 5, category = 'Ammo' },
 			{ name = 'WEAPON_KNIFE', price = 200, category = 'Weapons' },
 			{ name = 'WEAPON_BAT', price = 100, category = 'Weapons' },
-			{ name = 'WEAPON_PISTOL', price = 1000, metadata = { registered = true }, license = 'weapon', category = 'Weapons' }
+			{ name = 'WEAPON_PISTOL', price = 1000, metadata = { registered = true }, license = 'weapon', category = 'Weapons' },
+			{ name = 'WEAPON_ASSAULTRIFLE', price = 10000, metadata = { registered = true }, license = "weapon", category = "Rifles"}
 		}, 
         targets = {
 			{ loc = vec3(-660.92, -934.10, 21.94), length = 0.6, width = 0.5, heading = 180.0, minZ = 21.8, maxZ = 22.2, distance = 2.0 },
@@ -93,6 +114,23 @@ Config.Shops = {
 			{ loc = vec3(2566.59, 293.13, 108.85), length = 0.6, width = 0.5, heading = 360.0, minZ = 108.7, maxZ = 109.1, distance = 2.0 },
 			{ loc = vec3(-1117.61, 2700.26, 18.67), length = 0.6, width = 0.5, heading = 221.82, minZ = 18.5, maxZ = 18.9, distance = 2.0 },
 			{ loc = vec3(841.05, -1034.76, 28.31), length = 0.6, width = 0.5, heading = 360.0, minZ = 28.2, maxZ = 28.6, distance = 2.0 }
+		},
+		theme = {
+			primary = { r = 200, g = 0, b = 0 },
+			secondary = { r = 150, g = 0, b = 0 },
+			background = { r = 20, g = 20, b = 20 },
+			text = { r = 255, g = 255, b = 255 },
+			border = { r = 255, g = 255, b = 255, a = 0.1 },
+			button = {
+				cash = { r = 200, g = 0, b = 0 },
+				bank = { r = 150, g = 0, b = 0 }
+			},
+			scrollbar = {
+				track = { r = 30, g = 30, b = 30 },
+				thumb = { r = 200, g = 0, b = 0 },
+				thumbHover = { r = 150, g = 0, b = 0 }
+			},
+			logo = 'https://i.ibb.co/wr7S5km1/image.png'
 		}
 	},
 
@@ -119,7 +157,7 @@ Config.Shops = {
     PoliceArmoury = {
 		title = 'Police Armoury',
         categories = Config.Categories.weaponstore,
-        groups = "police",
+        groups = "police", -- or groups = { ["jobs"] = grade } 
 		blip = {
 			id = 110, colour = 84, scale = 0.8
 		}, items = {

@@ -1,13 +1,15 @@
 fx_version "cerulean"
 
-description "A good shop script based on ox_inventory's shop"
-author "Snowy"
-version '1.0.1'
-repository 'https://github.com/SSnowly/snowy_shops'
+description "Basic React (TypeScript) & Lua Game Scripts Boilerplate"
+author "Project Error"
+version '1.0.0'
+repository 'https://github.com/project-error/fivem-react-boilerplate-lua'
+
 lua54 'yes'
 
 games {
   "gta5",
+  "rdr3"
 }
 
 ui_page 'web/build/index.html'

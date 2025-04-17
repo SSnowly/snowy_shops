@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { motion, AnimatePresence } from 'framer-motion';
 import ItemCard from './ItemCard';
 import CategoryList from './CategoryList';
 import CartItem from './CartItem';
@@ -42,9 +43,11 @@ interface ShopInterfaceProps {
   };
   shopTitle: string;
   licenses: Record<string, boolean>;
+  logo: string;
+  onClose: () => void;
 }
 
-export const IslandBase = styled.div`
+export const IslandBase = styled(motion.div)`
   background: var(--background-color-transparent);
   border-radius: 12px;
   box-shadow: 0 8px 32px var(--shadow-color);
@@ -200,6 +203,7 @@ const CartLogo = styled.div`
   left: 50%;
   transform: translate(-50%, -55%);
   display: flex;
+  max-height: 100px;
   width: 200px;
   align-items: center;
   justify-content: center;
@@ -297,8 +301,12 @@ const ShopInterface: React.FC<ShopInterfaceProps> = ({
   onSearch,
   balance,
   shopTitle,
-  licenses
+  licenses,
+  logo,
+  onClose,
 }) => {
+  const [isClosing, setIsClosing] = useState(false);
+
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -307,88 +315,130 @@ const ShopInterface: React.FC<ShopInterfaceProps> = ({
     }
   };
 
+  const handleClose = () => {
+    setIsClosing(true);
+    // Wait for animations to complete before actually closing
+    setTimeout(() => {
+      onClose();
+    }, 400); // slightly longer than animation duration
+  };
+  useEffect(() => {
+       const KeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape' || e.key === 'Backspace') {
+          handleClose();
+        }
+      };
+      window.addEventListener('keydown', KeyDown, false);
+      return () => {
+        window.removeEventListener('keydown', KeyDown, false);
+      }
+    });
   return (
-    <ShopContainer>
-      <CategorySidebar>
-        <CategoryList
-          categories={categories}
-          selectedCategory={selectedCategory}
-          onSelectCategory={onSelectCategory}
-        />
-      </CategorySidebar>
-
-      <TopBar>
-        <Title>{shopTitle}</Title>
-        <BalanceInfo>
-          <BalanceItem type="cash">
-            <BalanceLabel type="cash">
-              <BalanceIcon type="cash"><DollarSign size={16} /></BalanceIcon>
-              <BalanceAmount type="cash">${balance.cash.toLocaleString()}</BalanceAmount>
-            </BalanceLabel>
-          </BalanceItem>
-          <BalanceItem type="bank">
-            <BalanceLabel type="bank">
-              <BalanceIcon type="bank"><CreditCard size={16} /></BalanceIcon>
-              <BalanceAmount type="bank">${balance.bank.toLocaleString()}</BalanceAmount>
-            </BalanceLabel>
-          </BalanceItem>
-        </BalanceInfo>
-      </TopBar>
-
-      <MainContent>
-        <SearchBar>
-          <SearchInput
-            type="text"
-            placeholder="Search items..."
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onSearch(e.target.value)}
-            onKeyDown={handleKeyDown}
-          />
-        </SearchBar>
-        <ItemsGrid>
-          {items.map(item => (
-            <ItemCard
-              key={item.id}
-              {...item}
-              onAddToCart={() => onAddToCart(item)}
-              license={item.license}
-              licenses={licenses}
+    <AnimatePresence mode="wait" onExitComplete={() => onClose()}>
+      {!isClosing && (
+        <ShopContainer>
+          <CategorySidebar
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+          >
+            <CategoryList
+              categories={categories}
+              selectedCategory={selectedCategory}
+              onSelectCategory={onSelectCategory}
             />
-          ))}
-        </ItemsGrid>
-      </MainContent>
+          </CategorySidebar>
 
-      <CartSidebar>
-        <CartHeader>
-          <CartLogo>
-            <img src="https://i.ibb.co/GQNykkH5/logo.png" alt="Cart Logo" />
-          </CartLogo>
-          <CartTitle>Your Cart</CartTitle>
-        </CartHeader>
-        <CartItems>
-          {cart.map(item => (
-            <CartItem
-              key={item.id}
-              {...item}
-              onUpdateQuantity={(quantity) => onUpdateQuantity(item.id, quantity)}
-              onRemove={() => onRemoveFromCart(item.id)}
-            />
-          ))}
-        </CartItems>
-        <CartFooter>
-          <TotalAmount>Total: ${total.toLocaleString()}</TotalAmount>
-          <PaymentSection>
-            <PaymentButton onClick={() => onPayment('cash')}>
-              <DollarSign color="var(--button-cash-color)" />
-              Cash
-            </PaymentButton>
-            <PaymentButton onClick={() => onPayment('card')}>
-              <CreditCard color="var(--button-bank-color)" />
-              Card
-            </PaymentButton>
-          </PaymentSection>
-        </CartFooter>
-      </CartSidebar>
-    </ShopContainer>
+          <TopBar
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -50 }}
+            transition={{ duration: 0.3, ease: "easeOut", delay: 0.1 }}
+          >
+            <Title>{shopTitle}</Title>
+            <BalanceInfo>
+              <BalanceItem type="cash">
+                <BalanceLabel type="cash">
+                  <BalanceIcon type="cash"><DollarSign size={16} /></BalanceIcon>
+                  <BalanceAmount type="cash">${balance.cash.toLocaleString()}</BalanceAmount>
+                </BalanceLabel>
+              </BalanceItem>
+              <BalanceItem type="bank">
+                <BalanceLabel type="bank">
+                  <BalanceIcon type="bank"><CreditCard size={16} /></BalanceIcon>
+                  <BalanceAmount type="bank">${balance.bank.toLocaleString()}</BalanceAmount>
+                </BalanceLabel>
+              </BalanceItem>
+            </BalanceInfo>
+          </TopBar>
+
+          <MainContent
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.3, ease: "easeOut", delay: 0.2 }}
+          >
+            <SearchBar>
+              <SearchInput
+                type="text"
+                placeholder="Search items..."
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onSearch(e.target.value)}
+                onKeyDown={handleKeyDown}
+              />
+            </SearchBar>
+            <ItemsGrid>
+              {items.map(item => (
+                <ItemCard
+                  key={item.id}
+                  {...item}
+                  onAddToCart={() => onAddToCart(item)}
+                  license={item.license}
+                  licenses={licenses}
+                />
+              ))}
+            </ItemsGrid>
+          </MainContent>
+
+          <CartSidebar
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 50 }}
+            transition={{ duration: 0.3, ease: "easeOut", delay: 0.3 }}
+          >
+            <CartHeader>
+              <CartLogo>
+                <img src={logo} alt="Cart Logo" />
+              </CartLogo>
+              <CartTitle>Your Cart</CartTitle>
+            </CartHeader>
+            <CartItems>
+              {cart.map(item => (
+                <CartItem
+                  key={item.id}
+                  {...item}
+                  onUpdateQuantity={(quantity) => onUpdateQuantity(item.id, quantity)}
+                  onRemove={() => onRemoveFromCart(item.id)}
+                />
+              ))}
+            </CartItems>
+            <CartFooter>
+              <TotalAmount>Total: ${total.toLocaleString()}</TotalAmount>
+              <PaymentSection>
+                <PaymentButton onClick={() => onPayment('cash')}>
+                  <DollarSign color="var(--button-cash-color)" />
+                  Cash
+                </PaymentButton>
+                <PaymentButton onClick={() => onPayment('card')}>
+                  <CreditCard color="var(--button-bank-color)" />
+                  Card
+                </PaymentButton>
+              </PaymentSection>
+            </CartFooter>
+          </CartSidebar>
+        </ShopContainer>
+      )}
+    </AnimatePresence>
   );
 };
 

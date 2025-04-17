@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { X } from 'lucide-react';
+import { motion } from 'framer-motion';
+
 interface CartItemProps {
   name: string;
   price: number;
@@ -104,24 +106,36 @@ const CartItem: React.FC<CartItemProps> = ({
   };
 
   return (
-    <ItemContainer>
-      <ItemImage src={image} alt={name} />
-      <ItemDetails>
-        <div>
-          <ItemName>{name}</ItemName>
-          <ItemPrice>${price.toLocaleString()}</ItemPrice>
-        </div>
-        <QuantityControls>
-          <QuantityButton onClick={() => handleQuantityChange(-1)}>-</QuantityButton>
-          <Quantity>{quantity}</Quantity>
-          <QuantityButton onClick={() => handleQuantityChange(1)}>+</QuantityButton>
-        </QuantityControls>
-      </ItemDetails>
-      <RemoveButton onClick={onRemove}>
-        <X />
-      </RemoveButton>
-    </ItemContainer>
+    <motion.div
+      initial={{ opacity: 0, x: 50 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 50 }}
+      layout
+      transition={{
+        type: "spring",
+        stiffness: 500,
+        damping: 30
+      }}
+    >
+      <ItemContainer>
+        <ItemImage src={image} alt={name} />
+        <ItemDetails>
+          <div>
+            <ItemName>{name}</ItemName>
+            <ItemPrice>${price.toLocaleString()}</ItemPrice>
+          </div>
+          <QuantityControls>
+            <QuantityButton onClick={() => handleQuantityChange(-1)}>-</QuantityButton>
+            <Quantity>{quantity}</Quantity>
+            <QuantityButton onClick={() => handleQuantityChange(1)}>+</QuantityButton>
+          </QuantityControls>
+        </ItemDetails>
+        <RemoveButton onClick={onRemove}>
+          <X />
+        </RemoveButton>
+      </ItemContainer>
+    </motion.div>
   );
 };
 
-export default CartItem; 
+export default CartItem;
