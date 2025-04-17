@@ -1,9 +1,9 @@
 fx_version "cerulean"
 
-description "Basic React (TypeScript) & Lua Game Scripts Boilerplate"
-author "Project Error"
-version '1.0.0'
-repository 'https://github.com/project-error/fivem-react-boilerplate-lua'
+author "Snowy"
+description "Shopping Script"
+version '1.1.0'
+repository 'https://github.com/SSnowly/snowy_shops'
 
 lua54 'yes'
 
