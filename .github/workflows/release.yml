@@ -38,7 +38,7 @@ jobs:
           working-directory: web
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile --force
         working-directory: web
 
       - name: Run build
