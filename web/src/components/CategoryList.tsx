@@ -21,6 +21,8 @@ const CategoryContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
+  overflow-y: auto;
+  
 `;
 
 const CategoryItem = styled.div<CategoryItemProps>`
@@ -118,4 +120,4 @@ const CategoryList: React.FC<CategoryListProps> = ({
   );
 };
 
-export default CategoryList; 
+export default CategoryList;

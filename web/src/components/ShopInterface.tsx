@@ -52,6 +52,23 @@ export const IslandBase = styled(motion.div)`
   border-radius: 12px;
   box-shadow: 0 8px 32px var(--shadow-color);
   border: 1px solid var(--border-color);
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--background-color);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb-color);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover-color);
+  }
 `;
 
 const ShopContainer = styled.div`
@@ -138,6 +155,7 @@ const CategorySidebar = styled(IslandBase)`
   padding: 20px;
   overflow-y: auto;
   height: calc(100% - 40px);
+  
 `;
 
 const MainContent = styled(IslandBase)`
@@ -226,6 +244,25 @@ const CartTitle = styled.h2`
 const CartItems = styled.div`
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
+  /* Custom scrollbar styles */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--background-color);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb-color);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover-color);
+  }
 `;
 
 const CartFooter = styled.div`

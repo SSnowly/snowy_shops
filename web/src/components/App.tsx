@@ -185,12 +185,23 @@ const App: React.FC = () => {
       paymentType: method
     }).then(response => {
       if (response.success) {
-        fetchNui('closeNui');
-        setIsVisible(false);
+        handleClose();
       }
     });
   };
   const handleClose = () => {
+    setBalance({
+      cash: 0,
+      bank: 0
+    });
+    setCart([]);
+    setItems([]);
+    setCategories([]);
+    setLicenses({});
+    setSelectedCategory('all');
+    setSearchQuery('');
+    setShopTitle('Shop');
+    setLogo('https://i.ibb.co/GQNykkH5/logo.png');
     setIsVisible(false);
     fetchNui('closeNui');
   };

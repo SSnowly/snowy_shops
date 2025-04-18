@@ -55,8 +55,53 @@ Config.Categories = {
 				--["job/gang"] = grade,
 				["lostmc"] = 3
 			}, -- or groups = "police"
-		}
-    },
+		},
+		{
+			id = "Tools",
+			name = "Tools",
+			icon = "fa-solid fa-wrench",
+		},
+		{
+			id = "Misc",
+			name = "Misc",
+			icon = "fa-solid fa-box-open",
+		},
+		{
+			id = "Attachments",
+			name = "Attachments",
+			icon = "fa-solid fa-wrench",
+		},
+		{
+			id = "Melee",
+			name = "Melee",
+			icon = "fa-solid fa-gun",
+		},
+		{
+			id = "Taser",
+			name = "Taser",
+			icon = "fa-solid fa-bolt",
+		},
+		{
+			id = "Misc",
+			name = "Misc",
+			icon = "fa-solid fa-box-open",
+		},
+		{
+			id = "Misc",
+			name = "Misc",
+			icon = "fa-solid fa-box-open",
+		},
+		{
+			id = "Misc",
+			name = "Misc",
+			icon = "fa-solid fa-box-open",
+		},
+		{
+			id = "Misc",
+			name = "Misc",
+			icon = "fa-solid fa-box-open",
+		},
+	},
 }
 
 Config.Shops = {
@@ -102,7 +147,11 @@ Config.Shops = {
 			{ name = 'WEAPON_KNIFE', price = 200, category = 'Weapons' },
 			{ name = 'WEAPON_BAT', price = 100, category = 'Weapons' },
 			{ name = 'WEAPON_PISTOL', price = 1000, metadata = { registered = true }, license = 'weapon', category = 'Weapons' },
-			{ name = 'WEAPON_ASSAULTRIFLE', price = 10000, metadata = { registered = true }, license = "weapon", category = "Rifles"}
+			{ name = 'WEAPON_ASSAULTRIFLE', price = 10000, metadata = { registered = true }, license = "weapon", category = "Rifles"},
+			{ name = "WEAPON_CARBINERIFLE", price = 10000, metadata = { registered = true }, license = "weapon", category = "Rifles"},
+			{ name = 'WEAPON_SMG', price = 10000, metadata = { registered = true }, license = "weapon", category = "Rifles"},
+			{ name = 'WEAPON_PUMPSHOTGUN', price = 10000, metadata = { registered = true }, license = "weapon", category = "Rifles"},
+			{ name = 'WEAPON_SNIPERRIFLE', price = 10000, metadata = { registered = true }, license = "weapon", category = "Rifles"}
 		}, 
         targets = {
 			{ loc = vec3(-660.92, -934.10, 21.94), length = 0.6, width = 0.5, heading = 180.0, minZ = 21.8, maxZ = 22.2, distance = 2.0 },
