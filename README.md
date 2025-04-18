@@ -11,8 +11,14 @@ A modern and secure shop system for FiveM servers with a beautiful UI and extens
 - 💰 Multiple payment methods support
 - 🔐 Permission-based access control
 
-## Images
-![an image of the ui](https://github.com/user-attachments/assets/6a716aa3-7078-407a-bc36-257046ac7657)
+<details>
+<summary># Images</summary>
+<br>
+![image](https://github.com/user-attachments/assets/b31ff58a-2e47-453a-8045-a5b33e7de21f)
+![image](https://github.com/user-attachments/assets/acc281bd-825e-4d7b-92bc-9f3020556f82)
+  
+</details>
+
 
 
 
